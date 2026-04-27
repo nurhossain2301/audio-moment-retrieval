@@ -19,3 +19,5 @@ valid
 zip_file
 AF-tuning/models/
 AF-tuning/data
+AF-tuning/outputs/
+clotho_features.zip

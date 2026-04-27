@@ -4,15 +4,15 @@
 #SBATCH -n 1
 #SBATCH --cpus-per-task=8
 #SBATCH --mem=128g
-#SBATCH -J "uvcom_clotho_pre"
+#SBATCH -J "uvcom_castella_pre"
 #SBATCH -p short
 #SBATCH -t 24:00:00
 #SBATCH --mail-type=ALL
 #SBATCH --mail-user=mkhan@wpi.edu
 #SBATCH --gres=gpu:1
 #SBATCH -C L40S
-#SBATCH -o uvcom_audio_clotho_pretrain_%j.out
-#SBATCH -e uvcom_audio_clotho_pretrain_%j.err
+#SBATCH -o uvcom_audio_castella_pretrain_%j.out
+#SBATCH -e uvcom_audio_castella_pretrain_%j.err
 
 set -euo pipefail
 
@@ -33,7 +33,7 @@ export HF_HUB_OFFLINE=1
 export TRANSFORMERS_OFFLINE=1
 
 echo "=========================================="
-echo "UVCOM-audio Clotho-Moment pretraining"
+echo "UVCOM-audio Castella pretraining"
 echo "=========================================="
 echo "Start time: $(date)"
 echo "Node: $(hostname)"
@@ -44,22 +44,22 @@ echo ""
 
 cd "$LIGHTHOUSE_DIR"
 
-if [ ! -d "features/clotho-moment/clap_text" ] || [ ! -d "features/clotho-moment/clap" ]; then
-    echo "ERROR: Missing Clotho-Moment CLAP features."
+if [ ! -d "features/castella/clap_text" ] || [ ! -d "features/castella/clap" ]; then
+    echo "ERROR: Missing castella CLAP features."
     echo "Expected:"
-    echo "  $LIGHTHOUSE_DIR/features/clotho-moment/clap_text/*.npz"
-    echo "  $LIGHTHOUSE_DIR/features/clotho-moment/clap/*.npz"
+    echo "  $LIGHTHOUSE_DIR/features/castella/clap_text/*.npz"
+    echo "  $LIGHTHOUSE_DIR/features/castella/clap/*.npz"
     echo ""
-    echo "This trainer uses pre-extracted features. Generate or copy the Clotho-Moment"
+    echo "This trainer uses pre-extracted features. Generate or copy the castella"
     echo "CLAP text/audio features before submitting this pretraining job."
     exit 2
 fi
 
 python training/train.py \
     --model uvcom_audio \
-    --dataset clotho-moment \
+    --dataset castella \
     --feature clap
 
 echo ""
 echo "Finished at: $(date)"
-echo "Results directory: $LIGHTHOUSE_DIR/results/uvcom_audio/clotho-moment/clap"
+echo "Results directory: $LIGHTHOUSE_DIR/results/uvcom_audio/castella/clap"
